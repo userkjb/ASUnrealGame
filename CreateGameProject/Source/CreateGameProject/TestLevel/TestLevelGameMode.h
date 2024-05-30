@@ -4,19 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
-#include "CPP_TestLevelGameMode.generated.h"
+#include "TestLevelGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CREATEGAMEPROJECT_API ACPP_TestLevelGameMode : public AGameMode
+class CREATEGAMEPROJECT_API ATestLevelGameMode : public AGameMode
 {
 	GENERATED_BODY()
 	
-protected :
-	void BeginPlay();
-	void Tick(float _DeltaTime) override;
-
-public :
 };
