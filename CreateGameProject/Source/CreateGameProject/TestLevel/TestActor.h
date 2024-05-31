@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PaperSpriteComponent.h"
 #include "TestActor.generated.h"
 
 UCLASS()
@@ -23,4 +24,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(Category = Pawn, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPaperSpriteComponent* SpriteComponent = nullptr;
+
+	float Time = 0.0f;
+	int SpriteIndex = 0;
 };
