@@ -14,4 +14,14 @@ class CREATEGAMEPROJECT_API ATestLevelGameMode : public AGameMode
 {
 	GENERATED_BODY()
 	
+protected :
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(Category = Pawn, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FTransform CPPTrans;
+
+
+	UPROPERTY(Category = Pawn, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UClass* CreateClass = nullptr;
 };
