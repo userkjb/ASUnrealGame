@@ -26,4 +26,27 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void MoveRight(float Val);
+	void MoveForward(float Val);
+	void MoveUp_World(float Val);
+	void TurnAtRate(float Rate);
+	void LookUpAtRate(float Rate);
+
+private:
+	static FName MovementComponentName;
+	static FName CollisionComponentName;
+	static FName MeshComponentName;
+
+	UPROPERTY(Category = Pawn, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USphereComponent> CollisionComponent;
+
+	UPROPERTY(Category = Pawn, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPawnMovementComponent> MovementComponent;
+
+	UPROPERTY(Category = Pawn, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UStaticMeshComponent> MeshComponent;
+
+	float BaseTurnRate;
+	float BaseLookUpRate;
+	uint32 bAddDefaultMovementBindings = 1;
 };
