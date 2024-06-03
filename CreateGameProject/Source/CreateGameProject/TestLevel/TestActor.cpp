@@ -43,7 +43,7 @@ void ATestActor::Tick(float DeltaTime)
 			SpriteIndex = 0;
 		}
 
-		SpriteComponent->SetSprite(Ptr->Sprites[SpriteIndex]);
+		//SpriteComponent->SetSprite(Ptr->Sprites[SpriteIndex]);
 
 		Time = 0.0f;
 	}
