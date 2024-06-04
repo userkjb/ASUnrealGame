@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h" // 스프링 암.
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/PlayerInput.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -24,6 +25,7 @@ ASideScrollCharacter::ASideScrollCharacter()
 	// SpringArmComponent->SetupAttachment(RootComponent);
 	// RootComponent == GetRootComponent()
 	SpringArmComponent->SetupAttachment(GetCapsuleComponent());
+	SpringArmComponent->bDoCollisionTest = false;
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	FQuat Rot = UKismetMathLibrary::Quat_MakeFromEuler(FVector(0.0f, 0.0f, -90.0f));
@@ -49,5 +51,33 @@ void ASideScrollCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	check(PlayerInputComponent);
+
+	// 이동
+	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("DefaultPawn_Speed", EKeys::A, -1.f));
+	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("DefaultPawn_Speed", EKeys::D, 1.f));
+
+	// 점프
+	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("DefaultPawn_Jump", EKeys::SpaceBar));
+
+	
+	PlayerInputComponent->BindAxis("DefaultPawn_Speed", this, &ASideScrollCharacter::SpeedChange);
+
+	PlayerInputComponent->BindAction("DefaultPawn_Jump", EInputEvent::IE_Pressed, this, &ASideScrollCharacter::PlayerJump);
+}
+
+void ASideScrollCharacter::SpeedChange(float _Value)
+{
+	if (_Value != 0)
+	{
+		// 내가 만약 MoveComponent를 가지고 있다면 그 Component에 부탁을 한다.
+		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), _Value);
+	}
+}
+
+void ASideScrollCharacter::PlayerJump()
+{
+	ACharacter::JumpMaxCount = 2;
+	ACharacter::Jump();
 }
 

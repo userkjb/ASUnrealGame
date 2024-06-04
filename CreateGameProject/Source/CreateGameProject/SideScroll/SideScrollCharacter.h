@@ -32,4 +32,8 @@ private :
 
 	UPROPERTY(Category = "Side", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
+
+	void SpeedChange(float _Value);
+
+	void PlayerJump();
 };
