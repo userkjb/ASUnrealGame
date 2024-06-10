@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-//#include "Engine/DataTable.h"
+#include "Global/DataTable/SideScrollGameSettingRow.h"
 #include "GlobalGameInstance.generated.h"
 
 /**

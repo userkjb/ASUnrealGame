@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/PlayerInput.h"
+#include "Global/GlobalGameInstance.h"
+#include "CreateGameProject.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -24,8 +26,9 @@ ASideScrollCharacter::ASideScrollCharacter()
 
 	// SpringArmComponent->SetupAttachment(RootComponent);
 	// RootComponent == GetRootComponent()
-	SpringArmComponent->SetupAttachment(GetCapsuleComponent());
 	SpringArmComponent->bDoCollisionTest = false;
+	//SpringArmComponent->SetupAttachment(GetCapsuleComponent());
+	SpringArmComponent->SetupAttachment(RootComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	FQuat Rot = UKismetMathLibrary::Quat_MakeFromEuler(FVector(0.0f, 0.0f, -90.0f));
@@ -37,12 +40,27 @@ void ASideScrollCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// ÇÑ ¹ø¸¸.
+	GainCollisionPtr = FindComponentByTag<UCapsuleComponent>(TEXT("Gain"));
+	if (nullptr == GainCollisionPtr)
+	{
+		UE_LOG(MyGameLog, Fatal, TEXT("%S(%u)> if (nullptr == Cap)"), __FUNCTION__, __LINE__);
+	}
+
+	UGlobalGameInstance* inst = GetWorld()->GetGameInstanceChecked<UGlobalGameInstance>();
+	SideScrollData = inst->GetSideScrollData();
+
+	PlayerData = SideScrollData->PlayerData;
 }
 
 // Called every frame
 void ASideScrollCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	AddActorLocalOffset(FVector(1.0f, 0.0f, 0.0f) * DeltaTime * PlayerData.PlayerSpeed);
+
+	Gravity(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -65,14 +83,36 @@ void ASideScrollCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	//PlayerInputComponent->BindAction("DefaultPawn_Jump", EInputEvent::IE_Pressed, this, &ASideScrollCharacter::PlayerJump);
 }
 
+void ASideScrollCharacter::Gravity(float _DeltaTime)
+{
+}
+
 void ASideScrollCharacter::FrontMove(float _DeltaTime)
 {
+	GetMesh()->AddRelativeLocation(FVector(1.0f, 0.0f, 0.0f) * _DeltaTime * PlayerData.ViewChracterSpeed);
+	FVector MeshPos = GetMesh()->GetRelativeLocation();
+	if (PlayerData.FrontMax <= MeshPos.X)
+	{
+		MeshPos.X = PlayerData.FrontMax;
+		GetMesh()->SetRelativeLocation(MeshPos);
+	}
 
+	MeshPos.Z += GainCollisionPtr->GetScaledCapsuleHalfHeight();
+	GainCollisionPtr->SetRelativeLocation(MeshPos);
 }
 
 void ASideScrollCharacter::BackMove(float _DeltaTime)
 {
-	
+	GetMesh()->AddRelativeLocation(FVector(-1.0f, 0.0f, 0.0f) * _DeltaTime * PlayerData.ViewChracterSpeed);
+	FVector MeshPos = GetMesh()->GetRelativeLocation();
+	if (PlayerData.FrontMax >= MeshPos.X)
+	{
+		MeshPos.X = PlayerData.FrontMax;
+		GetMesh()->SetRelativeLocation(MeshPos);
+	}
+
+	MeshPos.Z += GainCollisionPtr->GetScaledCapsuleHalfHeight();
+	GainCollisionPtr->SetRelativeLocation(MeshPos);
 }
 
 void ASideScrollCharacter::JumpMove()

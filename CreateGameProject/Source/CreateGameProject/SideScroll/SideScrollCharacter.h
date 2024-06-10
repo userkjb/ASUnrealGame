@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Global/DataTable/SideScrollGameSettingRow.h"
 #include "SideScrollCharacter.generated.h"
 
 UCLASS()
@@ -35,6 +36,8 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Gravity(float _DeltaTime);
+
 private :
 	UPROPERTY(Category = "Side", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* SpringArmComponent;
@@ -42,7 +45,14 @@ private :
 	UPROPERTY(Category = "Side", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
 
+	// DT 담는 상수.
+	const FSideScrollGameSettingRow* SideScrollData;
+	FSideScrollPlayerData PlayerData;
+
+	// 추가한 콜리전 담는 변수
+	UPROPERTY(Category = "Contents", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCapsuleComponent* GainCollisionPtr;
 
 	
-	float GravityPower; // 누적된 중력.
+	float GravityPower = 0.0f; // 누적된 중력.
 };
