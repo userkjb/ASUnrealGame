@@ -31,9 +31,14 @@ public :
 	// Table 변환 함수.
 	const struct FGlobalActorRow* GetActorData(FName _Name);
 
+	const struct FSideScrollGameSettingRow* GetSideScrollData();
+
 private :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UDataTable* ActorDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UDataTable* SideScrollData;
 
 	UGlobalGameInstance();
 };

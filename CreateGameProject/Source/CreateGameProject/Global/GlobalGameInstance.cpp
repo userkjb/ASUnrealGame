@@ -3,6 +3,7 @@
 
 #include "Global/GlobalGameInstance.h"
 #include "Global/DataTable/GlobalActorRow.h"
+#include "CreateGameProject.h"
 
 UGlobalGameInstance::UGlobalGameInstance()
 {
@@ -26,4 +27,21 @@ const FGlobalActorRow* UGlobalGameInstance::GetActorData(FName _Name)
 	}
 
 	return ActorData;
+}
+
+const FSideScrollGameSettingRow* UGlobalGameInstance::GetSideScrollData()
+{
+	if (nullptr == SideScrollData)
+	{
+		UE_LOG(MyGameLog, Fatal, TEXT("%S(%u)> if (nullptr == SideScrollData)"), __FUNCTION__, __LINE__);
+	}
+
+	FSideScrollGameSettingRow* Data = SideScrollData->FindRow<FSideScrollGameSettingRow>(TEXT("Data"), nullptr);
+	if (nullptr == Data)
+	{
+		UE_LOG(MyGameLog, Error, TEXT("%S(%u) > Side Scroll Data Is Nullptr"), __FUNCTION__, __LINE__);
+		return nullptr;
+	}
+
+	return Data;
 }
