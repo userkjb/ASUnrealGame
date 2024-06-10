@@ -15,11 +15,20 @@ public:
 	// Sets default values for this character's properties
 	ASideScrollCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	void FrontMove(float _DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+	void BackMove(float _DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+	void JumpMove();
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -33,7 +42,7 @@ private :
 	UPROPERTY(Category = "Side", VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
 
-	void SpeedChange(float _Value);
 
-	void PlayerJump();
+	
+	float GravityPower; // 누적된 중력.
 };

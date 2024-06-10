@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedActionKeyMapping.h"
 #include "SideScrollPlayerController.generated.h"
 
 /**
@@ -14,4 +16,10 @@ class CREATEGAMEPROJECT_API ASideScrollPlayerController : public APlayerControll
 {
 	GENERATED_BODY()
 	
+public :
+	void SetupInputComponent() override;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputMappingContext* InputMapping;
+	//TSoftObjectPtr<UInputMappingContext> InputMapping;
 };

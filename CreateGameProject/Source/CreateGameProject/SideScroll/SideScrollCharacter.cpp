@@ -43,7 +43,6 @@ void ASideScrollCharacter::BeginPlay()
 void ASideScrollCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -53,31 +52,40 @@ void ASideScrollCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	check(PlayerInputComponent);
 
-	// 이동
-	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("DefaultPawn_Speed", EKeys::A, -1.f));
-	UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("DefaultPawn_Speed", EKeys::D, 1.f));
+	//// 이동
+	//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("DefaultPawn_Speed", EKeys::A, -1.f));
+	//UPlayerInput::AddEngineDefinedAxisMapping(FInputAxisKeyMapping("DefaultPawn_Speed", EKeys::D, 1.f));
 
-	// 점프
-	UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("DefaultPawn_Jump", EKeys::SpaceBar));
+	//// 점프
+	//UPlayerInput::AddEngineDefinedActionMapping(FInputActionKeyMapping("DefaultPawn_Jump", EKeys::SpaceBar));
 
+	//
+	//PlayerInputComponent->BindAxis("DefaultPawn_Speed", this, &ASideScrollCharacter::SpeedChange);
+
+	//PlayerInputComponent->BindAction("DefaultPawn_Jump", EInputEvent::IE_Pressed, this, &ASideScrollCharacter::PlayerJump);
+}
+
+void ASideScrollCharacter::FrontMove(float _DeltaTime)
+{
+
+}
+
+void ASideScrollCharacter::BackMove(float _DeltaTime)
+{
 	
-	PlayerInputComponent->BindAxis("DefaultPawn_Speed", this, &ASideScrollCharacter::SpeedChange);
-
-	PlayerInputComponent->BindAction("DefaultPawn_Jump", EInputEvent::IE_Pressed, this, &ASideScrollCharacter::PlayerJump);
 }
 
-void ASideScrollCharacter::SpeedChange(float _Value)
+void ASideScrollCharacter::JumpMove()
 {
-	if (_Value != 0)
-	{
-		// 내가 만약 MoveComponent를 가지고 있다면 그 Component에 부탁을 한다.
-		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), _Value);
-	}
+	//ACharacter::JumpMaxCount = 2;
+	//ACharacter::Jump();
 }
 
-void ASideScrollCharacter::PlayerJump()
-{
-	ACharacter::JumpMaxCount = 2;
-	ACharacter::Jump();
-}
-
+//void ASideScrollCharacter::SpeedChange(float _Value)
+//{
+//	if (_Value != 0)
+//	{
+//		// 내가 만약 MoveComponent를 가지고 있다면 그 Component에 부탁을 한다.
+//		AddMovementInput(FVector(1.0f, 0.0f, 0.0f), _Value);
+//	}
+//}
