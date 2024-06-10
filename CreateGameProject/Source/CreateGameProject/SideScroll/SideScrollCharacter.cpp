@@ -105,9 +105,9 @@ void ASideScrollCharacter::BackMove(float _DeltaTime)
 {
 	GetMesh()->AddRelativeLocation(FVector(-1.0f, 0.0f, 0.0f) * _DeltaTime * PlayerData.ViewChracterSpeed);
 	FVector MeshPos = GetMesh()->GetRelativeLocation();
-	if (PlayerData.FrontMax >= MeshPos.X)
+	if (PlayerData.BackMax >= MeshPos.X)
 	{
-		MeshPos.X = PlayerData.FrontMax;
+		MeshPos.X = PlayerData.BackMax;
 		GetMesh()->SetRelativeLocation(MeshPos);
 	}
 
@@ -119,6 +119,7 @@ void ASideScrollCharacter::JumpMove()
 {
 	//ACharacter::JumpMaxCount = 2;
 	//ACharacter::Jump();
+	int a = 0;
 }
 
 //void ASideScrollCharacter::SpeedChange(float _Value)
