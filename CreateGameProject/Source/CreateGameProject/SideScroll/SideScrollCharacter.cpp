@@ -60,7 +60,10 @@ void ASideScrollCharacter::Tick(float DeltaTime)
 
 	AddActorLocalOffset(FVector(1.0f, 0.0f, 0.0f) * DeltaTime * PlayerData.PlayerSpeed);
 
-	Gravity(DeltaTime);
+	if (true == IsGroundValue)
+	{
+		Gravity(DeltaTime);
+	}
 }
 
 // Called to bind functionality to input
@@ -85,6 +88,16 @@ void ASideScrollCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ASideScrollCharacter::Gravity(float _DeltaTime)
 {
+	GravityPower += PlayerData.GravityAccSpeed * _DeltaTime;
+	GetMesh()->AddRelativeLocation(FVector(0.0f, 0.0f, GravityPower) * _DeltaTime);
+	GainCollisionPtr->AddRelativeLocation(FVector(0.0f, 0.0f, GravityPower) * _DeltaTime);
+}
+
+void ASideScrollCharacter::SetViewChracterPos(FVector _Pos)
+{
+	GetMesh()->SetRelativeLocation(_Pos);
+	_Pos.Z += GainCollisionPtr->GetScaledCapsuleHalfHeight();
+	GainCollisionPtr->SetRelativeLocation(_Pos);
 }
 
 void ASideScrollCharacter::FrontMove(float _DeltaTime)
@@ -96,9 +109,8 @@ void ASideScrollCharacter::FrontMove(float _DeltaTime)
 		MeshPos.X = PlayerData.FrontMax;
 		GetMesh()->SetRelativeLocation(MeshPos);
 	}
-
-	MeshPos.Z += GainCollisionPtr->GetScaledCapsuleHalfHeight();
-	GainCollisionPtr->SetRelativeLocation(MeshPos);
+	
+	SetViewChracterPos(MeshPos);
 }
 
 void ASideScrollCharacter::BackMove(float _DeltaTime)
@@ -111,15 +123,49 @@ void ASideScrollCharacter::BackMove(float _DeltaTime)
 		GetMesh()->SetRelativeLocation(MeshPos);
 	}
 
-	MeshPos.Z += GainCollisionPtr->GetScaledCapsuleHalfHeight();
-	GainCollisionPtr->SetRelativeLocation(MeshPos);
+	SetViewChracterPos(MeshPos);
 }
 
-void ASideScrollCharacter::JumpMove()
+void ASideScrollCharacter::ViewJumpBegin(float _DeltaTime)
 {
 	//ACharacter::JumpMaxCount = 2;
 	//ACharacter::Jump();
-	int a = 0;
+}
+
+void ASideScrollCharacter::ViewJumpGravity(float _DeltaTime)
+{
+	if (true == IsGroundValue)
+	{
+
+	}
+
+	GravityPower += PlayerData.GravityAccSpeed * _DeltaTime;
+	GetMesh()->AddRelativeLocation(FVector(0.0f, 0.0f, GravityPower) * _DeltaTime);
+	GainCollisionPtr->AddRelativeLocation(FVector(0.0f, 0.0f, GravityPower) * _DeltaTime);
+}
+
+void ASideScrollCharacter::PlayerCollision(AActor* _CollisionActor)
+{
+	if (true == _CollisionActor->ActorHasTag(TEXT("Coin")))
+	{
+		_CollisionActor->Destroy();
+	}
+
+	if (true == _CollisionActor->ActorHasTag(TEXT("Ground")))
+	{
+		FVector MeshPos = GetMesh()->GetRelativeLocation();
+		MeshPos.Z = 0.0f; // 언덕이 없는 게임이라 가정한다.
+		SetViewChracterPos(MeshPos);
+		IsGroundValue = true;
+	}
+}
+
+void ASideScrollCharacter::PlayerCollisionEnd(AActor* _CollisionActor)
+{
+	if (true == _CollisionActor->ActorHasTag(TEXT("Ground")))
+	{
+		IsGroundValue = false;
+	}
 }
 
 //void ASideScrollCharacter::SpeedChange(float _Value)
